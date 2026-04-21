@@ -1,0 +1,71 @@
+# ------------------------------
+# OS / Editor
+# ------------------------------
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ------------------------------
+# Secrets / Local env
+# ------------------------------
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# ------------------------------
+# Python (agents, contracts tooling)
+# ------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+.python-version
+.venv/
+venv/
+env/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+.coverage
+.coverage.*
+htmlcov/
+
+build/
+dist/
+site/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ------------------------------
+# Node / Next.js (web)
+# ------------------------------
+node_modules/
+.npm/
+.pnpm-store/
+
+.next/
+out/
+coverage/
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# ------------------------------
+# Smart contract / blockchain tooling
+# ------------------------------
+.ape/
+.brownie/
+cache/
+broadcast/
+artifacts/
+typechain/

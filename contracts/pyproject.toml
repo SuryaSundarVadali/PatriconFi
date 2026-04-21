@@ -1,0 +1,18 @@
+[project]
+name = "patriconfi-contracts"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "pytest>=8.0.0",
+  "titanoboa>=0.2.6",
+  "vyper>=0.3.10",
+]
+
+[project.scripts]
+deploy-agent-registry = "scripts.deploy_agent_registry:main"
+deploy-agent-vault = "scripts.deploy_vault:main"
+deploy-activity-ledger = "scripts.deploy_activity_ledger:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
