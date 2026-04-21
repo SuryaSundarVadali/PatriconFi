@@ -34,8 +34,12 @@ target-version = "py311"
 line-length = 100
 
 [tool.poe.tasks]
-bootstrap = "python -m pip install --upgrade pip && python -m pip install -e .[dev]"
 build = "python -m scripts.contract_tasks compile"
 test = "pytest -q"
-lint = "ruff check scripts tests && mypy scripts tests && python -m scripts.contract_tasks lint"
 e2e = "python -m scripts.contract_tasks arc-smoke"
+
+[tool.poe.tasks.bootstrap]
+shell = "python -m pip install --upgrade pip && python -m pip install -e .[dev]"
+
+[tool.poe.tasks.lint]
+shell = "python3 -m ruff check scripts tests && python3 -m mypy scripts tests && python3 -m scripts.contract_tasks lint"

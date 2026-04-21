@@ -36,8 +36,12 @@ target-version = "py311"
 line-length = 100
 
 [tool.poe.tasks]
-bootstrap = "python -m pip install --upgrade pip && python -m pip install -e .[dev]"
 build = "python -m compileall -q patriconfi_agents"
 test = "pytest -q"
-lint = "ruff check . && mypy patriconfi_agents"
 e2e = "pytest -q tests/test_agent_flows.py"
+
+[tool.poe.tasks.bootstrap]
+shell = "python -m pip install --upgrade pip && python -m pip install -e .[dev]"
+
+[tool.poe.tasks.lint]
+shell = "python3 -m ruff check . && python3 -m mypy patriconfi_agents"
