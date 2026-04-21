@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { AgentTable } from "../../components/AgentTable";
 import { WalletConnector } from "../../components/WalletConnector";
@@ -31,7 +31,7 @@ export default function AgentsPage() {
     return (isConnected && address) || e2eMode;
   }, [address, isConnected]);
 
-  const loadAgents = async () => {
+  const loadAgents = useCallback(async () => {
     if (!publicClient) {
       return;
     }
@@ -45,20 +45,20 @@ export default function AgentsPage() {
         status: "registered",
       })),
     );
-  };
+  }, [publicClient]);
 
   useEffect(() => {
     void loadAgents();
     const handle = setInterval(() => void loadAgents(), 10_000);
     return () => clearInterval(handle);
-  }, [publicClient]);
+  }, [loadAgents]);
 
   useEffect(() => {
     if (receipt.isSuccess) {
       setFeedback(`Registration confirmed: ${receipt.data.transactionHash}`);
       void loadAgents();
     }
-  }, [receipt.isSuccess]);
+  }, [loadAgents, receipt.data?.transactionHash, receipt.isSuccess]);
 
   const onRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

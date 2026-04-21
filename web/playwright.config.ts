@@ -11,10 +11,4 @@ export default defineConfig({
     trace: "on-first-retry",
     headless: true,
   },
-  webServer: {
-    command: "NEXT_PUBLIC_E2E_TEST_MODE=1 npm run dev -- --port 3000",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
 });

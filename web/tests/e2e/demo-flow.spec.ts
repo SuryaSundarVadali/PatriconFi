@@ -23,6 +23,12 @@ test("connect wallet, register agent, run demo, verify pricing and interactions"
   await page.goto("/dashboard");
   await page.getByTestId("run-demo-btn").click();
   await expect(page.getByTestId("demo-feedback")).toContainText(/completed|Starting|failed/i);
+  await expect
+    .poll(async () => {
+      const totalInteractionsText = await page.getByTestId("total-interactions").innerText();
+      return Number(totalInteractionsText.match(/(\d+)/)?.[1] ?? "0");
+    })
+    .toBeGreaterThanOrEqual(50);
 
   const totalInteractionsText = await page.getByTestId("total-interactions").innerText();
   const interactions = Number(totalInteractionsText.match(/(\d+)/)?.[1] ?? "0");

@@ -8,7 +8,7 @@ CI workflows live in `.github/workflows/`:
 
 - `contracts.yml`: Vyper/Titanoboa tests, contract lint/compile checks, optional Arc RPC smoke step.
 - `agents.yml`: pytest, mypy, and ruff checks.
-- `web.yml`: lint, type/build test, and Playwright end-to-end tests.
+- `web.yml`: lint, typecheck, and Playwright end-to-end tests against a dev server wrapper.
 
 Security baseline for CI:
 

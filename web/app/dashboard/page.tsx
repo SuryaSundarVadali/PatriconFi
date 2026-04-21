@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePublicClient } from "wagmi";
 import { TxFeed } from "../../components/TxFeed";
 import { WalletConnector } from "../../components/WalletConnector";
@@ -46,7 +46,7 @@ export default function DashboardPage() {
   const [runFeedback, setRunFeedback] = useState("");
   const [demoResult, setDemoResult] = useState<DemoResult | null>(null);
 
-  const refreshDashboard = async () => {
+  const refreshDashboard = useCallback(async () => {
     if (!publicClient) {
       return;
     }
@@ -80,13 +80,13 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [publicClient]);
 
   useEffect(() => {
     void refreshDashboard();
     const interval = setInterval(() => void refreshDashboard(), 12_000);
     return () => clearInterval(interval);
-  }, [publicClient]);
+  }, [refreshDashboard]);
 
   const summaryMetrics = useMemo(() => {
     const eventInteractions = events.length;
