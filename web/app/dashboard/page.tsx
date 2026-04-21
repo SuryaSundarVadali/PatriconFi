@@ -22,6 +22,9 @@ type DemoResult = {
   txHashes?: string[];
 };
 
+const DEMO_COUNT = 55;
+const DEMO_PRICE_MICROUSDC = 2500;
+
 export default function DashboardPage() {
   const publicClient = usePublicClient();
   const [agentBalances, setAgentBalances] = useState<Array<{ agentId: string; balance: bigint }>>([]);
@@ -111,7 +114,11 @@ export default function DashboardPage() {
   const runDemo = async () => {
     setIsRunningDemo(true);
     setRunFeedback("Starting demo orchestration...");
-    setDemoResult(null);
+    setDemoResult({
+      interactions: DEMO_COUNT,
+      total_spent_microusdc: DEMO_COUNT * DEMO_PRICE_MICROUSDC,
+      avg_price_microusdc: DEMO_PRICE_MICROUSDC,
+    });
     setRunProgress(8);
 
     const progressTimer = setInterval(() => {
@@ -124,7 +131,7 @@ export default function DashboardPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ count: 55, price_microusdc: 2500 }),
+        body: JSON.stringify({ count: DEMO_COUNT, price_microusdc: DEMO_PRICE_MICROUSDC }),
       });
 
       if (!response.ok) {
