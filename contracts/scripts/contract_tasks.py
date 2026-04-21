@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
+
+import boa
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,32 +15,34 @@ SRC_DIR = ROOT / "src"
 
 
 def _iter_contract_files() -> list[Path]:
-    return sorted(path for path in SRC_DIR.rglob("*.vy") if path.is_file())
+    return sorted(
+        path for path in SRC_DIR.rglob("*.vy") if path.is_file() and "interfaces" not in path.parts
+    )
 
 
-def _run_vyper(format_name: str) -> None:
+def _compile_contracts() -> None:
     contracts = _iter_contract_files()
     if not contracts:
         raise SystemExit("No Vyper contracts found under src/")
 
     for contract in contracts:
-        subprocess.run(
-            ["vyper", "-f", format_name, str(contract)],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT,
-        )
+        try:
+            boa.load_partial(str(contract))
+        except Exception as exc:  # pragma: no cover - used for CI diagnostics
+            raise SystemExit(
+                f"Vyper compile check failed for {contract.relative_to(ROOT)}\n{exc}"
+            ) from exc
         print(f"ok: {contract.relative_to(ROOT)}")
 
 
 def compile_contracts() -> None:
-    print("Compiling Vyper contracts...")
-    _run_vyper("bytecode_runtime")
+    print("Compiling Vyper contracts via Titanoboa...")
+    _compile_contracts()
 
 
 def lint_contracts() -> None:
-    print("Linting Vyper contracts via compile checks...")
-    _run_vyper("abi")
+    print("Linting Vyper contracts via Titanoboa compile checks...")
+    _compile_contracts()
 
 
 def arc_rpc_smoke_check() -> None:

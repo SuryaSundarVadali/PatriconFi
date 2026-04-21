@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Mapping
 
 from .aisa_client import AisaClient
 from .arc_client import ArcClient
@@ -108,7 +108,7 @@ def create_app(runtime: AgentRuntime) -> Any:
 def _build_runtime(settings: Settings) -> AgentRuntime:
     # Orchestrator signing must come from secure custody/keystore integration.
     class PlaceholderSigner:
-        def sign_transaction(self, tx_payload: dict[str, Any]) -> str:
+        def sign_transaction(self, tx_payload: Mapping[str, Any]) -> str:
             _ = tx_payload
             return "0xdeadbeef"
 
@@ -116,7 +116,7 @@ def _build_runtime(settings: Settings) -> AgentRuntime:
     from .x402_client import X402Client
 
     class PlaceholderAuthSigner:
-        def sign_eip712(self, typed_data: dict[str, Any]) -> dict[str, str]:
+        def sign_eip712(self, typed_data: Mapping[str, Any]) -> Mapping[str, Any]:
             _ = typed_data
             return {"signature": "0xplaceholder", "type": "EIP-3009"}
 

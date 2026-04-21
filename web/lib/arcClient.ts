@@ -6,11 +6,9 @@ import {
   type Address,
   CONTRACTS,
 } from "./contracts";
+import type { usePublicClient } from "wagmi";
 
-type ArcPublicClient = {
-  getLogs: (params: Record<string, unknown>) => Promise<Array<Record<string, any>>>;
-  readContract: (params: Record<string, unknown>) => Promise<unknown>;
-};
+type ArcPublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
 
 export type RegisteredAgent = {
   agentId: bigint;
