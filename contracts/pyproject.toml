@@ -8,6 +8,13 @@ dependencies = [
   "vyper>=0.3.10",
 ]
 
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.6.0",
+  "mypy>=1.11.0",
+  "poethepoet>=0.30.0",
+]
+
 [project.scripts]
 deploy-agent-registry = "scripts.deploy_agent_registry:main"
 deploy-agent-vault = "scripts.deploy_vault:main"
@@ -16,3 +23,19 @@ deploy-activity-ledger = "scripts.deploy_activity_ledger:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+files = ["scripts", "tests"]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.poe.tasks]
+bootstrap = "python -m pip install --upgrade pip && python -m pip install -e .[dev]"
+build = "python -m scripts.contract_tasks compile"
+test = "pytest -q"
+lint = "ruff check scripts tests && mypy scripts tests && python -m scripts.contract_tasks lint"
+e2e = "python -m scripts.contract_tasks arc-smoke"
